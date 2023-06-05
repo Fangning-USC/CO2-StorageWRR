@@ -1,0 +1,106 @@
+*GEOROCK 1     ** Matrix Upper Aquifer + injection layer (sandstone) 
+*ELASTMOD 40e6      ** Elastic Young's modulus (kpa) 
+*POISSRATIO 0.2      ** Poisson's ratio 
+*FRICANGLE 40.0       ** Friction angle (degrees) 
+*COHESION 700         ** Cohesion (kpa) 
+*BIOTSCOEF 0.8
+
+*GEOROCK 2     ** Fracture Upper Aquifer + injection layer (sandstone)  
+*ELASTMOD 40e6      ** Elastic Young's modulus (kpa) 
+*POISSRATIO 0.2      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+
+*GEOROCK 3     ** Caprock (shale) matrix
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+
+** ========================== inj ==========================
+*GEOROCK 4     ** Caprock (shale) fracture with Barton-Bandis Model, layer 6
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+*GPERMBB  1.981e-05     6.786e7      7400       100.     100.     33. 
+
+*GEOROCK 5     ** Caprock (shale) fracture with Barton-Bandis Model, layer 7
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+*GPERMBB  1.981e-05     6.786e7      7600       100.     100.     33. 
+
+*GEOROCK 6     ** Caprock (shale) fracture with Barton-Bandis Model, layer 8
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+*GPERMBB  1.981e-05     6.786e7      7700       100.     100.     33. 
+
+*GEOROCK 7     ** Caprock (shale) fracture with Barton-Bandis Model, layer 9
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+*GPERMBB  1.981e-05     6.786e7      7750       100.     100.     33. 
+
+*GEOROCK 8     ** Caprock (shale) fracture with Barton-Bandis Model, layer 10
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+*GPERMBB  1.981e-05     6.786e7      7820       100.     100.     33. 
+
+
+** ========================== Side ========================== 
+
+
+*GEOROCK 9     ** Caprock (shale) fracture with Barton-Bandis Model, side
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8
+*GPERMBB  1.981e-05     6.786e7      7400       1.     1.     1.  
+
+*GEOROCK 10     ** Caprock (shale) fracture with Barton-Bandis Model, side
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa)
+*POISSRATIO 0.18      ** Poisson's ratio
+*FRICANGLE 20.0       ** Friction angle (degrees)
+*COHESION 700         ** Cohesion (kpa)
+*BIOTSCOEF 0.8 
+*GPERMBB  1.981e-05     6.786e7      7600       1.     1.     1.  
+
+*GEOROCK 11     ** Caprock (shale) fracture with Barton-Bandis Model, side 
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa) 
+*POISSRATIO 0.18      ** Poisson's ratio 
+*FRICANGLE 20.0       ** Friction angle (degrees) 
+*COHESION 700         ** Cohesion (kpa) 
+*BIOTSCOEF 0.8 
+*GPERMBB  1.981e-05     6.786e7      7700       1.     1.     1.  
+
+*GEOROCK 12     ** Caprock (shale) fracture with Barton-Bandis Model, side 
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa) 
+*POISSRATIO 0.18      ** Poisson's ratio 
+*FRICANGLE 20.0       ** Friction angle (degrees) 
+*COHESION 700         ** Cohesion (kpa) 
+*BIOTSCOEF 0.8 
+*GPERMBB  1.981e-05     6.786e7      7750       1.     1.     1.  
+
+*GEOROCK 13     ** Caprock (shale) fracture with Barton-Bandis Model, side 
+*ELASTMOD 15e6      ** Elastic Young's modulus (kpa) 
+*POISSRATIO 0.18      ** Poisson's ratio 
+*FRICANGLE 20.0       ** Friction angle (degrees) 
+*COHESION 700         ** Cohesion (kpa) 
+*BIOTSCOEF 0.8 
+*GPERMBB  1.981e-05     6.786e7      7820       1.     1.     1.  
+

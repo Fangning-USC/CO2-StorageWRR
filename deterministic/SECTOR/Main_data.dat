@@ -1,0 +1,451 @@
+**--------------------------------------------------------------------**
+** Main_data.DAT:  CO2 Sequestration - Cap Rock Leakage               **
+**--------------------------------------------------------------------**
+**--------------------------------------------------------------------**
+**                                                                    **
+**                                                                    **
+**                                                                    **
+** MODEL: 38x30x30 GRID           CAP ROCK LEAKAGE                    **
+**        2 COMPONENTS                                                **
+**                                                                    **
+**--------------------------------------------------------------------**
+**                                                                    **
+** This template models CO2 injection into an aquifer. Once a         **
+** certain threshold pressure has been reached, leakage of fluid      **
+** through the cap rock is modelled using Barton-Bandis Model         **
+**                                                                    **
+**--------------------------------------------------------------------**
+** CONTACT Fangning Zheng at fangninz@usc.edu                         **
+**--------------------------------------------------------------------**
+
+RESULTS SIMULATOR GEM
+
+** ------- Input/Output ---------------
+
+*FILENAMES *OUTPUT *SRFOUT *RESTARTOUT *INDEXOUT *MAINRESULTSOUT
+*DIM *MDGRID 100
+
+INUNIT SI
+
+*WRST *TIME
+
+*WPRN *WELL  *TIME
+**WPRN *GRID  *TIME
+*WPRN *GRID 1
+
+*WSRF *WELL 1
+*WSRF *GRID 1
+*WSRF GRIDDEFORM TIME
+
+
+*DIARY *CHANGES
+
+*OUTPRN *WELL *BRIEF
+*OUTPRN *RES *ALL
+
+*SRFORMAT IMRF
+
+OUTSRF GRID DENG DENW PERM POROS COMPRW PRES VISW VISG TEMP PRMNDIR PRMXDIR SG STRESI STRESJ STRESK STRNEPL
+            STRESNORM STRESSH STRNMNP STRNMXP SW VDISPL VELOCRC W 'CO2' Y 'CO2' Z 'CO2' 
+            *YOUNG *POISSON GCOHESION FRICANGLE *SAFACTOR *DPORMNR *SGHYS *SGRHYS *KRG *KRW *SGDTHY  *VMSTRESS	
+			SUBSIDGEO
+			*STRAINI *STRAINJ *STRAINK *STRAINSH *STRAINVOL
+			*STRESSHIJ *STRESSHIK *STRESSHJK *VERDSPLGEO
+			*VPOROSGEO *VPOROSTGEO
+			*TSTRESI *TSTRESJ *TSTRESK *STRESSM *STRESMXP *STRESMNP
+OUTSRF RES ALL
+OUTSRF WELL PSPLIT
+OUTSRF WELL PAVG 
+            GHGGAS 
+            GHGLIQ 
+            GHGSOL 
+            GHGSCRIT 
+            GHGTHY 
+**OUTSRF FLUX-SECTOR ALL
+SUMMARY
+**$  Distance units: m 
+RESULTS XOFFSET           0.0000
+RESULTS YOFFSET           0.0000
+RESULTS ROTATION           0.0000  **$  (DEGREES)
+RESULTS AXES-DIRECTIONS 1.0 -1.0 1.0
+
+** ------------- Grid ----------------------
+
+*GRID *VARI 38 30 30 
+
+*DI *IVAR 4*1000 30*100 4*1000   **grid no. * grid size
+*DJ *CON 100 
+*DK *KVAR 10*25 20*2.5
+**DK *KVAR 106 61.0 35.1 20.24 11.65 6.70 3.86 2.22 1.28 1 20*2.5e+00   
+      
+*KDIR DOWN
+*DTOP 1140*750
+
+** Dual permeability/porosity system
+DUALPERM 
+
+*include poro_matrix.txt
+*include poro_fracture.txt
+
+*include perm_matrix.txt
+*include perm_fracture.txt
+
+** set null blocks for non-caprock blocks   $  0 = null block, 1 = active block
+NULL MATRIX CON    1
+NULL FRACTURE CON  1
+*MOD
+    1:38       1:30         1:5     = 0
+    1:38       1:30         11:30     = 0
+
+**$ Property: Fracture Spacing I (m)   Max: 10  Min: 10
+DIFRAC CON           10
+**$ Property: Fracture Spacing J (m)   Max: 10  Min: 10
+DJFRAC CON           10
+**$ Property: Fracture Spacing K (m)   Max: 10  Min: 10
+DKFRAC CON           10
+
+PINCHOUTARRAY CON 1
+**SECTOR SECTORARRAY  
+SECTOR 'upperAQUIFER' MATRIX  1:38 1:30 1:5
+SECTOR 'SHALE_LAYER_matrix' MATRIX  1:38 1:30 6:10
+SECTOR 'SHALE_LAYER_frac' FRACTURE  1:38 1:30 6:10
+SECTOR 'injRESERVOIR' MATRIX  1:38 1:30 11:30 
+
+
+** Assign rock type to different layers
+CTYPE MATRIX KVAR   
+ 5*1 5*3 20*1        **grid no. * grid size
+CTYPE FRACTURE KVAR 
+ 5*2 5*4 20*2
+ 
+CROCKTYPE 1
+CCPOR FRACTURE 1E-7
+CCPOR 1E-7
+CPRPOR FRACTURE 9810
+CPRPOR 9810
+CROCKTYPE 2
+CCPOR FRACTURE 1E-7
+CCPOR 1E-7
+CPRPOR FRACTURE 9810
+CPRPOR 9810
+CROCKTYPE 3
+CCPOR FRACTURE 1E-6
+CCPOR 1E-6
+CPRPOR FRACTURE 9810
+CPRPOR 9810
+CROCKTYPE 4
+CCPOR FRACTURE 1E-6
+CCPOR 1E-6
+CPRPOR FRACTURE 9810
+CPRPOR 9810
+ 
+ 
+**REFINE 1:50 1:50 1:10 *INTO 3 3 1
+
+** --------------- Fluid Model ---------------
+*MODEL   *PR
+*NC    2    2
+*TRES   40
+*PVC3  1.2000000E+00
+*COMPNAME
+             'CO2     '    'C1      '
+*SG        8.1800000E-01  3.0000000E-01
+*TB       -7.8450000E+01 -1.6145000E+02
+*PCRIT     7.2800000E+01  4.5400000E+01
+*VCRIT     9.4000000E-02  9.9000000E-02
+*TCRIT     3.0420000E+02  1.9060000E+02
+*AC        2.2500000E-01  8.0000000E-03
+*MW        4.4010000E+01  1.6043000E+01
+*HCFLAG    0  0  ** 0
+*BIN
+     1.0300000E-01
+*VSHIFT
+     0.0000000E+00  0.0000000E+00
+*VISCOR *HZYT
+*MIXVC     1.0000000E+00
+*VISVC
+     9.4000000E-02  9.9000000E-02
+*VISCOEFF
+     1.0230000E-01  2.3364000E-02  5.8533000E-02 -4.0758000E-02  9.3324000E-03
+*OMEGA
+     4.5723553E-01  4.5723553E-01
+*OMEGB
+     7.7796074E-02  7.7796074E-02
+*PCHOR
+     7.8000000E+01  7.7000000E+01
+
+** --- Solubility of components in aqueous ---**
+** Henry's law 
+*HENRYC
+     1.9510547E+05  0.0
+*REFPH
+     9.4000000E+03  9.4000000E+03
+*VINFINITY
+     3.5089333E-02  3.5242646E-02
+
+
+** -------------------- Rock Fluid -----------
+*ROCKFLUID
+*RPT 1  *DRAINAGE
+
+*SGT
+0	0.000000	1	0.2
+0.05	0.000473	0.9	3
+0.1	0.003662	0.68	4
+0.15	0.011948	0.54	5.8
+0.2	0.027344	0.42	6
+0.25	0.051498	0.3	6
+0.3	0.085693	0.25	6.2
+0.35	0.130844	0.17	6.5
+0.4	0.187500	0.13	7
+0.45	0.255844	0.08	8.36
+0.5	0.335693	0.06	9
+0.55	0.426498	0.04	9.5
+0.6	0.527344	0.012	10
+0.65	0.636948	0.000001	12.5
+0.7	0.753662	0.000001	19.3
+0.75	0.875473	0.000001	40
+0.8	1.000000	0.000000	45
+
+*SWT
+0.2	0.000000	1	45
+0.25	0.000015	0.8	40
+0.3	0.000244	0.66	19.3
+0.35	0.001236	0.5	12.5
+0.4	0.003906	0.37	10
+0.45	0.009537	0.24	9.5
+0.5	0.019775	0.17	9
+0.55	0.036636	0.083	8.36
+0.6	0.062500	0.05	7
+0.65	0.100113	0.02	6.5
+0.7	0.152588	0.000001	6.2
+0.75	0.223404	0.000001	6
+0.8	0.316406	0.000001	6
+0.85	0.435806274	0.000001	5.8
+0.9	0.586181641	0.000001	4
+0.95	0.772476196	0.000001	3
+1	1	0.000000	0.2
+
+**KROIL *STONE2 *SWSG
+
+*HYSKRG 0.4
+
+**====================== INITIAL ======================
+*INITIAL
+*VERTICAL *BLOCK_CENTER *WATER_GAS
+*NREGIONS 1
+*ZOIL 	0.000000001 0.999999999
+*ZGAS 	0.000000001 0.999999999
+**INCLUDE Refdeppress.IN
+*REFDEPTH 	1000.  **m
+*REFPRES 	9810. **kpa 
+*DWGC 	100.
+*SWOC 	0.999
+
+
+** ----------------- Numerical ----------------------
+*NUMERICAL
+   *MAXCHANGE *SATUR  1
+   *MAXCHANGE *GMOLAR 1
+   *MAXCHANGE PRESS 500000
+   *CONVERGE *MAXRES  1e-5
+*DTMIN 1.E-07
+*DTMAX 182
+
+*DPLANES
+*SOLVER *PARASOL
+*PPATTERN *AUTOPSLAB 20
+*PNPROSL 20
+*PNTHRDS 20
+
+**  ==============  GEOMECHANIC MODEL  ======================
+*GEOMECH              ** Main keyword for using geomechanics module                             
+*GEOM3D               ** Using 3D finite elements
+
+
+GEOGRID 
+GCART 32 32 31 
+GDI *GIVAR 1*4000 30*100 1*4000     **grid no. * grid size
+GDJ *GJVAR 1*4000 30*100 1*4000 
+GDK *GKVAR 10*25 20*2.5 500     
+**GTRANSLI -4000 
+GTRANSLJ -4000 
+GTRANSLK 750 
+
+INCLUDE GEOtype
+
+** Assign rock type to each layer
+GEOTYPE MATRIX KVAR 
+5*1 5*3 21*1         ** layer no. * GEOROCK type
+GEOTYPE FRACTURE IJK
+1:32 1:32 1:5 2
+1 1:32 6 9
+32 1:32 6 9 
+1 1:32   7 10
+32 1:32 7 10 
+1 1:32   8 11
+32 1:32 8 11
+1 1:32   9 12
+32 1:32 9 12
+1 1:32   10 13
+32 1:32 10 13
+
+2:31 1:32 6 4
+2:31 1:32 7 5
+2:31 1:32 8 6
+2:31 1:32 9 7
+2:31 1:32 10 8
+
+1:32 1:32 11:31 2
+
+** effective stresses gradient
+*STRESS3D  6.8625e+03 6.8625e+03 12200 0 0 0 **kpa
+*STRESSGRAD3D -9 -9 -16 0 0 0 **kpa/m
+  
+** ----------------- Recurrent -----------------------
+*RUN
+*DATE 2000 01 01
+*DTWELL .01
+*AIMWELL *WELLNN 
+   
+*WELL  1 'CO2-Injector1'
+     *INJECTOR 1
+          *INCOMP SOLVENT  1 0
+          *INCLUDE well_rate1.IN
+             *GEOMETRY I 0.2 0.37 1. 0.
+             *PERF GEO   'CO2-Injector1'
+             *INCLUDE well_location1.IN
+             
+*WELL  2 'CO2-Injector2'
+     *INJECTOR 2
+          *INCOMP SOLVENT  1 0
+          **OPERATE MAX STG  1e5 CONT  
+          *INCLUDE well_rate2.IN **OPERATE *MAX *BHP 25000
+             *GEOMETRY I 0.2 0.37 1. 0.
+             *PERF GEO   'CO2-Injector2'
+             *INCLUDE well_location2.IN **20 10 17 1. OPEN FLOW-FROM 'SURFACE' 
+
+*WELL  3 'CO2-Injector3'
+     *INJECTOR 3
+          *INCOMP SOLVENT  1 0
+          **OPERATE MAX STG  1e5 CONT  
+          *INCLUDE well_rate3.IN **OPERATE *MAX *BHP 25000
+             *GEOMETRY I 0.2 0.37 1. 0.
+             *PERF GEO   'CO2-Injector3'
+             *INCLUDE well_location3.IN **10 10 17 1. OPEN FLOW-FROM 'SURFACE' 
+
+
+*DATE 2001 01 01 
+*INJECTOR 1
+INCLUDE well_rate4.IN 
+*INJECTOR 2
+INCLUDE well_rate5.IN 
+*INJECTOR 3
+INCLUDE well_rate6.IN 
+
+*DATE 2002 01 01 
+*INJECTOR 1
+INCLUDE well_rate7.IN 
+*INJECTOR 2
+INCLUDE well_rate8.IN 
+*INJECTOR 3
+INCLUDE well_rate9.IN 
+
+*DATE 2003 01 01 
+*INJECTOR 1
+INCLUDE well_rate10.IN 
+*INJECTOR 2
+INCLUDE well_rate11.IN 
+*INJECTOR 3
+INCLUDE well_rate12.IN 
+
+*DATE 2004 01 01 
+*INJECTOR 1
+INCLUDE well_rate13.IN 
+*INJECTOR 2
+INCLUDE well_rate14.IN 
+*INJECTOR 3
+INCLUDE well_rate15.IN 
+
+*DATE 2005 01 01 
+*INJECTOR 1
+INCLUDE well_rate16.IN 
+*INJECTOR 2
+INCLUDE well_rate17.IN 
+*INJECTOR 3
+INCLUDE well_rate18.IN 
+
+*DATE 2006 01 01 
+*INJECTOR 1
+INCLUDE well_rate19.IN 
+*INJECTOR 2
+INCLUDE well_rate20.IN 
+*INJECTOR 3
+INCLUDE well_rate21.IN 
+
+*DATE 2007 01 01 
+*INJECTOR 1
+INCLUDE well_rate22.IN 
+*INJECTOR 2
+INCLUDE well_rate23.IN 
+*INJECTOR 3
+INCLUDE well_rate24.IN 
+
+*DATE 2008 01 01 
+*INJECTOR 1
+INCLUDE well_rate25.IN 
+*INJECTOR 2
+INCLUDE well_rate26.IN 
+*INJECTOR 3
+INCLUDE well_rate27.IN 
+
+*DATE 2009 01 01 
+*INJECTOR 1
+INCLUDE well_rate28.IN 
+*INJECTOR 2
+INCLUDE well_rate29.IN 
+*INJECTOR 3
+INCLUDE well_rate30.IN 
+
+*DATE 2010 01 01 
+*INJECTOR 1
+INCLUDE well_rate31.IN 
+*INJECTOR 2
+INCLUDE well_rate32.IN 
+*INJECTOR 3
+INCLUDE well_rate33.IN 
+
+*DATE 2011 01 01 
+*INJECTOR 1
+INCLUDE well_rate34.IN 
+*INJECTOR 2
+INCLUDE well_rate35.IN 
+*INJECTOR 3
+INCLUDE well_rate36.IN 
+
+*DATE 2012 01 01 
+*INJECTOR 1
+INCLUDE well_rate37.IN 
+*INJECTOR 2
+INCLUDE well_rate38.IN 
+*INJECTOR 3
+INCLUDE well_rate39.IN 
+
+*DATE 2013 01 01 
+*INJECTOR 1
+INCLUDE well_rate40.IN 
+*INJECTOR 2
+INCLUDE well_rate41.IN 
+*INJECTOR 3
+INCLUDE well_rate42.IN 
+
+*DATE 2014 01 01 
+*INJECTOR 1
+INCLUDE well_rate43.IN 
+*INJECTOR 2
+INCLUDE well_rate44.IN 
+*INJECTOR 3
+INCLUDE well_rate45.IN 
+
+*DATE 2015 01 01 
+STOP
